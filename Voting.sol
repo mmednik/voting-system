@@ -1,31 +1,34 @@
 //SPDX-License-Identifier: MIT
 pragma solidity ^0.8;
-pragma experimental ABIEncoderV2;
 
-contract voting {
+contract Voting {
     
     address public owner;
     
-    constructor () {
+    constructor() {
         owner = msg.sender;
     }
     
-    mapping (string => bytes32) candidateId;
-    mapping (string => uint) candidateVotes;
-    string [] candidates;
-    mapping (bytes32 => bool) public voters;
+    mapping(string => bytes32) candidateId;
+    mapping(string => uint) candidateVotes;
+    string[] candidates;
+    mapping(bytes32 => bool) public voters;
     
-    function nominateMeAsCandidate(string memory _name, uint _age, string memory _id) public {
+    function nominateMeAsCandidate(
+        string memory _name,
+        uint _age,
+        string memory _id
+    ) public {
         bytes32 candidateHash = keccak256(abi.encodePacked(_name, _age, _id));
         candidateId[_name] = candidateHash;
         candidates.push(_name);
     }
     
-    function getCandidates() public view returns (string [] memory) {
+    function getCandidates() public view returns(string[] memory) {
         return candidates;
     }
     
-    function hasVoted(bytes32 _voterHash) private view returns (bool) {
+    function hasVoted(bytes32 _voterHash) private view returns(bool) {
         return voters[_voterHash];
     }
     
@@ -37,7 +40,7 @@ contract voting {
         candidateVotes[_candidateName]++;
     }
     
-    function getCandidateVotes(string memory _candidateName) public view returns (uint) {
+    function getCandidateVotes(string memory _candidateName) public view returns(uint) {
         return candidateVotes[_candidateName];
     }
     
